@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+.choice {
+    font-size: 16px;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.outcome {
+    margin-top: 20px;
+}
+
+#result {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#score {
+    font-size: 16px;
+    margin-top: 10px;
+}
