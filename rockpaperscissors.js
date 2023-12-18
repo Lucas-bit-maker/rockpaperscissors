@@ -1,26 +1,34 @@
+const choices = document.querySelectorAll('.choice');
+const outcomeDiv = document.querySelector('.outcome');
+const resultParagraph = document.getElementById('result');
+const scoreParagraph = document.getElementById('score');
+
+let playerScore = 0;
+let computerScore = 0;
+
 function getComputerChoice() {
     const randomNumber = Math.floor(Math.random() * 3);
     switch (randomNumber) {
         case 0:
             return 'rock';
         case 1:
-            return 'Paper';
+            return 'paper';
         case 2:
-            return 'Scissors';
+            return 'scissors';
     }
 }
 
 function playRound(playerChoice, computerChoice) {
     if (
-        (playerChoice === 'rock' && computerChoice === 'Scissors') ||
-        (playerChoice === 'paper' && computerChoice === 'Rock') ||
-        (playerChoice === 'scissors' && computerChoice === 'Paper')
+        (playerChoice === 'rock' && computerChoice === 'scissors') ||
+        (playerChoice === 'paper' && computerChoice === 'rock') ||
+        (playerChoice === 'scissors' && computerChoice === 'paper')
     ) {
         return 'win';
     } else if (
-        (playerChoice === 'rock' && computerChoice === 'Paper') ||
-        (playerChoice === 'paper' && computerChoice === 'Scissors') ||
-        (playerChoice === 'scissors' && computerChoice === 'Rock')
+        (playerChoice === 'rock' && computerChoice === 'paper') ||
+        (playerChoice === 'paper' && computerChoice === 'scissors') ||
+        (playerChoice === 'scissors' && computerChoice === 'rock')
     ) {
         return 'lose';
     } else {
@@ -28,43 +36,49 @@ function playRound(playerChoice, computerChoice) {
     }
 }
 
-function game() {
-    let playerScore = 0;
-    let computerScore = 0;
-
-    for (let round = 1; round <= 5; round++) {
-        const playerChoice = prompt('Enter your choice: rock, paper, or scissors').toLowerCase();
+choices.forEach((choice) => {
+    choice.addEventListener('click', () => {
+        const playerChoice = choice.id;
         const computerChoice = getComputerChoice();
-
-        console.log(`Round ${round}:`);
-        console.log(`You chose ${playerChoice}`);
-        console.log(`Computer chose ${computerChoice}`);
-
         const result = playRound(playerChoice, computerChoice);
 
-        if (result === 'win') {
-            playerScore++;
-            console.log('You win this round!');
-        } else if (result === 'lose') {
-            computerScore++;
-            console.log('You lose this round!');
-        } else {
-            console.log("It's a tie!");
+        displayResult(result);
+        updateScore(result);
+        displayScore();
+
+        if (playerScore === 5 || computerScore === 5) {
+            endGame();
         }
+    });
+});
 
-        console.log(`Score - You: ${playerScore}, Computer: ${computerScore}`);
-        console.log('--------------------------');
-    }
+function displayResult(result) {
+    resultParagraph.textContent = result;
+}
 
-    // Determine the overall winner
-    if (playerScore > computerScore) {
-        console.log('Congratulations! You win the game!');
-    } else if (playerScore < computerScore) {
-        console.log('Sorry, you lose the game. Better luck next time!');
-    } else {
-        console.log("It's a tie game!");
+function updateScore(result) {
+    if (result === 'win') {
+        playerScore++;
+    } else if (result === 'lose') {
+        computerScore++;
     }
 }
 
-// Call the game function outside the loop
-game();
+function displayScore() {
+    scoreParagraph.textContent = `Score - You: ${playerScore}, Computer: ${computerScore}`;
+}
+
+function endGame() {
+    if (playerScore > computerScore) {
+        resultParagraph.textContent = 'Congratulations! You win the game!';
+    } else if (playerScore < computerScore) {
+        resultParagraph.textContent = 'Sorry, you lose the game. Better luck next time!';
+    } else {
+        resultParagraph.textContent = "It's a tie game!";
+    }
+
+    // Disable buttons after the game ends
+    choices.forEach((choice) => {
+        choice.removeEventListener('click');
+    });
+}
